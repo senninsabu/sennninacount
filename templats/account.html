@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>仙人アカウントページ</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#fdf6e3; color:#333; padding:20px;}
+    .container { max-width:800px; margin:20px auto; background:#fff; padding:30px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
+    h2 { text-align:center; color:#2E8B57; }
+    h3 { color:#2E8B57; margin-top:30px; }
+    input { padding:10px; margin-right:10px; border:1px solid #ccc; border-radius:5px; }
+    button { padding:7px 15px; background:#4CAF50; color:white; border:none; border-radius:5px; cursor:pointer; font-size:14px; }
+    button:hover { background:#45a049; }
+    table { width:100%; border-collapse:collapse; margin-top:10px; }
+    th, td { border:1px solid #ccc; padding:10px; text-align:left; }
+    th { background:#eee; }
+    a { color:#0066cc; text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    form.inline { display:inline; margin:0; }
+  </style>
+</head>
+<body>
+<div class="container">
+<h2>{{ user_id }}のアカウントページ</h2>
+
+<h3>APIキー発行</h3>
+<form method="POST" action="/generate_apikey">
+  <input name="app_name" placeholder="アプリ名" required>
+  <button type="submit">発行</button>
+</form>
+
+<h3>発行済みAPIキー</h3>
+<table>
+<tr><th>アプリ名</th><th>APIキー</th><th>操作</th></tr>
+{% for id, key, app_name, created_at in api_keys %}
+<tr>
+  <td>{{ app_name }}</td>
+  <td>{{ key }}</td>
+  <td>
+    <form method="POST" action="/delete_apikey/{{id}}" class="inline">
+      <button type="submit">削除</button>
+    </form>
+  </td>
+</tr>
+{% endfor %}
+</table>
+
+<h3>アプリデータ一覧</h3>
+<table>
+<tr><th>アプリ名</th><th>データ</th><th>作成日時</th></tr>
+{% for id, app_name, data, created_at in app_data %}
+<tr>
+  <td>{{ app_name }}</td>
+  <td>{{ data }}</td>
+  <td>{{ created_at }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<a href="/login">ログアウト</a>
+</div>
+</body>
+</html>
